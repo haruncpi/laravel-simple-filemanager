@@ -1,0 +1,47 @@
+{
+  "name": "haruncpi/laravel-simple-filemanager",
+  "description": "A simple filemanager for Laravel",
+  "license": "cc-by-4.0",
+  "keywords": [
+    "laravel",
+    "simple",
+    "filemanager"
+  ],
+  "type": "library",
+  "authors": [
+    {
+      "name": "MD.HARUN-UR-RASHID",
+      "email": "harun.cox@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=5.6",
+    "illuminate/support": "^5.0",
+    "intervention/image": "^2.0"
+  },
+  "autoload": {
+    "files": [
+      "src/helpers.php"
+    ],
+    "psr-4": {
+      "Haruncpi\\LaravelSimpleFilemanager\\": "src"
+    }
+  },
+  "scripts": {
+    "phpunit": "phpunit"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Haruncpi\\LaravelSimpleFilemanager\\ServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true
+  }
+}

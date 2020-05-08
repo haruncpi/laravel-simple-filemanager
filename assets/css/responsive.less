@@ -1,0 +1,154 @@
+@media only screen and (max-width: 780px) {
+  .btn_mobile_upload,.btn_mobile_preview {
+    display: block;
+  }
+  .btn_desktop_preview,.upload_section{
+    display: none;
+  }
+
+  .btn_mobile_upload_close {
+    display: block;
+    float: right;
+    margin-top: 4px;
+    margin-right: 3px;
+  }
+
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  header {
+    flex-direction: column;
+    max-height: 100px !important;
+    padding: 10px 15px;
+
+    .right {
+      margin-top: 10px;
+
+      .btn_bulk_actions, .btn-doc {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .wrapper {
+    flex-direction: column;
+
+    .sidebar, .content {
+      width: 100%;
+    }
+
+    .sidebar {
+      height: auto;
+      min-height: 1px !important;
+      padding-left: 15px;
+
+      .btn_mobile_upload {
+        margin-top: 10px;
+      }
+
+
+      .preview_section {
+        display: none;
+      }
+
+    }
+
+    .content {
+      position: inherit;
+      max-height: calc(100vh - 150px);
+      .gallery{
+        max-height: calc(100vh - 150px);
+      }
+      .gallery .gl_item {
+        .size, .type, .modified {
+          display: none;
+        }
+
+        .name, .action {
+          width: 50%;
+        }
+      }
+    }
+  }
+
+  .mobile_upload {
+    position: absolute;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 100vh;
+    z-index: 101;
+    background: #fff;
+    padding: 20px;
+    .btn_mobile_upload_close{
+      position: absolute;
+      right: 18px;
+      top: 15px;
+    }
+    .upload_area{
+      margin-top: 20px;
+      //height: 90vh;
+      overflow: auto;
+      min-height: 50px;
+      .dz-default{
+        margin: 0;
+      }
+    }
+    .mobile_preview_container{
+      background: #f4f4f4;
+      margin-top: 20px;
+      padding: 10px;
+    }
+  }
+
+  .mobile_preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    padding: 15px;
+    z-index: 100;
+    height: 100vh;
+
+    .preview_section {
+      overflow-y: auto;
+      height: 95vh;
+
+      .preview_header {
+        display: flex;
+        justify-content: space-between;
+        background: @titleBg;
+        //height: 40px;
+        padding: 10px;
+        font-weight: 700;
+        color: #555;
+      }
+
+      .image_wrapper {
+        margin-top: 20px;
+        width: 100%;
+
+
+        img {
+          width: 100%;
+        }
+
+      }
+
+      .info {
+        margin-top: 10px;
+        h2 {
+          font-size: 18px;
+        }
+        p {
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}

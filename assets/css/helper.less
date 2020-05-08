@@ -1,0 +1,149 @@
+.makeHeight(@minusHeight){
+    height: ~"calc(100vh - @{minusHeight})"; 
+}
+.makeWeight(@minusWidth){
+    width: ~"calc(100% - @{minusWidth})"; 
+}
+
+.makeAbsoluteFullDiv{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top:0;
+  left:0;
+}
+
+
+
+.center-block() {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.radius(@radius: 4px) {
+  border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+}
+
+.circle(@size){
+  width:@size;
+  height:@size;
+  border-radius:@size/2;
+  text-align:center;
+  line-height:@size;
+}
+
+.gradient-h (@startColor: #EEE, @endColor: #FFF) {
+  background-color: @endColor;
+  background-image: -webkit-gradient(linear, left center, right center, from(@startColor),to(@endColor));
+  background-image: -webkit-linear-gradient(left, @startColor, @endColor);
+  background-image:    -moz-linear-gradient(left, @startColor, @endColor);
+  background-image:      -o-linear-gradient(left, @startColor, @endColor);
+  background-image:         linear-gradient(left, @startColor, @endColor);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(GradientType=1, StartColorStr='%d', EndColorStr='%d')", @startColor, @endColor));
+}
+
+
+.gradient-v (@startColor: #EEE, @endColor: #FFF) {
+  background-color: mix(@startColor, @endColor, 60%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(@startColor), to(@endColor));
+  background-image: -webkit-linear-gradient(top, @startColor, @endColor);
+  background-image:    -moz-linear-gradient(top, @startColor, @endColor);
+  background-image:      -o-linear-gradient(top, @startColor, @endColor);
+  background-image:         linear-gradient(top, @startColor, @endColor);
+  filter: e(%("progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='%d', EndColorStr='%d')", @startColor, @endColor));
+}
+
+.font-face (@name: Helvetca Neue, @url: "/fonts/helvetica/helvetca-neue") {
+  @font-face {
+    font-family: %('%d', @name);
+    src: e(%("url('%d.eot?#') format('eot')", ~"@{url}")),
+         e(%("url('%d.woff') format('woff')", ~"@{url}")),
+         e(%("url('%d.ttf') format('truetype')", ~"@{url}"));
+  }
+}
+
+
+.placeholder(@rules) {
+    &::-webkit-input-placeholder { @rules(); } // Chrome 4+, Safari 5+, Opera 15+
+             &::-moz-placeholder { @rules(); } // Firefox 19+
+              &:-moz-placeholder { @rules(); } // Firefox 18-
+         &:-ms-input-placeholder { @rules(); } // IE 10+
+}
+
+
+.readMore() {
+    white-space: -moz-pre-wrap; // Firefox 4+
+    white-space:   -o-pre-wrap; // Opera 12.1-11.5
+    white-space:      pre-wrap; // Chrome 21+, Safari 6.1+, Opera 15+
+    word-wrap: break-word; // IE 6+
+}
+
+.opacity (@opacity: 0.5) {
+  -webkit-opacity:  @opacity;
+  -moz-opacity:     @opacity;
+  opacity:    @opacity;
+}
+
+.scale (@ratio: 1) {
+  -webkit-transform: scale(@ratio);
+     -moz-transform: scale(@ratio);
+      -ms-transform: scale(@ratio);
+       -o-transform: scale(@ratio);
+          transform: scale(@ratio);
+}
+
+.rotate (@degrees: 5) {
+    -webkit-transform: rotate(~"@{degrees}deg");
+       -moz-transform: rotate(~"@{degrees}deg");
+        -ms-transform: rotate(~"@{degrees}deg");
+         -o-transform: rotate(~"@{degrees}deg");
+            transform: rotate(~"@{degrees}deg");
+  }
+
+.bg-size (@value) {
+  -webkit-background-size: @value;
+          background-size: @value;
+}
+
+.scrollbar(@width){
+  &::-webkit-scrollbar {
+    width: @width;
+  }
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.clearfix() {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+//shadows
+.shadow_1(){
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
+.shadow_2(){
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+.shadow_3(){
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.shadow_4(){
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+.card_shadow(){
+  box-shadow: 0 0 1px 1px rgba(20, 23, 28, 0.1), 0 3px 1px 0 rgba(20, 23, 28, 0.1);
+}
