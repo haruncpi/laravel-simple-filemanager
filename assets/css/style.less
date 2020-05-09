@@ -19,6 +19,7 @@
   font-style: normal;
 }
 
+
 * {
   margin: 0;
   padding: 0;
@@ -143,9 +144,16 @@ header {
   max-height: @headerHeight;
   background: @baseBgColor;
   color: #fff;
-  padding: 20px;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+
+  .app_title{
+    display: flex;
+    height: 40px;
+    align-items: center;
+  }
 
   .right {
     display: flex;
@@ -512,7 +520,7 @@ button:disabled {
       cursor: pointer;
     }
   }
-  .content{
+  .popup_content{
     min-height: 100px;
     width: 100%;
     padding: 15px;

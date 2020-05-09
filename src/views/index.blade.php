@@ -19,7 +19,8 @@
 <body ng-controller="FilemanagerCtrl" ng-cloak class="{{config('app.locale')}}">
 
 <header>
-    <h2>{{trans('filemanager::filemanager.title')}}</h2>
+    <h2 class="app_title"><img src="{{asset('filemanager/img/logo.png')}}"
+                               alt=""><span>{{trans('filemanager::filemanager.title')}}</span></h2>
 
     <div class="right">
         <button class="btn_bulk_actions danger"
@@ -123,6 +124,7 @@
                     <div class="thum" ng-click="toggleCheck(photo.id)">
                         <img ng-if="photo.ext=='png' ||
                                     photo.ext=='jpg' ||
+                                    photo.ext=='jpeg' ||
                                     photo.ext=='webp' ||
                                     photo.ext=='gif'"
                              ng-src="{{$thumbUrl}}/@{{ photo.name }}" alt="@{{ photo.name }}">
@@ -182,11 +184,12 @@
 
 <script>
 
-    var _DEBUG = false;
+    var _DEBUG = true;
     Dropzone.autoDiscover = false;
 
-    if(!_DEBUG){
-        console.log = function() {}
+    if (!_DEBUG) {
+        console.log = function () {
+        }
     }
 
     var filemanager = angular.module('filemanager', ['thatisuday.dropzone', 'angular-ladda'])
@@ -378,9 +381,13 @@
                 if (!xhr.success) {
                     alert(xhr.msg)
                 }
-                console.log('success callback: ' + xhr.msg);
+                console.log('success callback:');
+                console.log(xhr)
                 $scope.dzMethods.removeFile(file);
                 $scope.mobileUploadOpen = false;
+
+                $scope.photos.unshift(xhr.data)
+                // $scope.$apply()
             },
             'error': function (file, xhr) {
                 $scope.dzMethods.removeFile(file)
@@ -392,7 +399,7 @@
             },
             'queuecomplete': function (files, xhr) {
                 $scope.dzMethods.removeAllFiles()
-                $scope.init()
+                // $scope.init()
                 console.log('queue completed');
                 //flash message
                 var el = $('.dz-default span');
@@ -412,6 +419,7 @@
         $scope.isPreviewable = function (file) {
             return file.ext === 'png' ||
                 file.ext === 'jpg' ||
+                file.ext === 'jpeg' ||
                 file.ext === 'webp' ||
                 file.ext === 'gif'
         };
@@ -509,17 +517,25 @@
 
             if (confirm("This action will delete " + $scope.checkedIds.length + " number of files. Are you sure?")) {
                 $scope.bulkDeleting = true;
+
                 $scope.checkedIds.forEach(function (id) {
                     var promise = $http.post('{{route('filemanager.base_route')}}?action=delete', {'id': id});
                     promises.push(promise);
                 });
 
-                $q.all(promises).then(function () {
+                var mapPromiseCallback = function (p, index) {
+                    return p.then(function (data) {
+                        // console.log(data)
+                    });
+                }
+
+                $q.all(promises.map(mapPromiseCallback)).then(function () {
                     $scope.init();
                     $scope.checkedIds = [];
                     $scope.bulkDeleting = false;
                     $scope.bulk_select = false
                 });
+
             }
         }
 
@@ -531,7 +547,8 @@
                     .success(function (data) {
                         console.log(data)
                         photo.deleting = false
-                        // $scope.init()
+                        $scope.previewOpen = false;
+                        $scope.preview = null;
                         $scope.photos.splice(index, 1);
                     })
             }
@@ -564,7 +581,12 @@
                         $scope.selected = {}
                         row.nameUpdating = false;
                         // $scope.init()
-                        $scope.photos[$scope.selectedIndex].name = row.name + '.' + row.ext
+
+                        $scope.photos[$scope.selectedIndex] = data.data;
+                        if ($scope.isPreviewable(row)) {
+                            $scope.preview = data.data
+                        }
+
                     } else {
                         alert(data.msg)
                     }
@@ -575,21 +597,24 @@
 
 
         $scope.convertPopup = false;
-        $scope.imageFormats = ['webp', 'jpg', 'png'];
+        $scope.imageFormats = ['webp', 'jpeg', 'png'];
         $scope.selectedFormat = '';
 
-        $scope.openConvertPopup = function (photo) {
+        $scope.openConvertPopup = function (photo, index) {
             $scope.convertPopup = true;
             $scope.selectedPhoto = photo;
             $scope.selectedFormat = '';
+            $scope.selectedIndex = index
         };
 
         $scope.selectFormat = function (format) {
             $scope.selectedFormat = format
-        }
+        };
+
         $scope.convert = function (photo, format) {
-            photo.converting = true;
+
             if (!confirm('Are you sure?')) return;
+            photo.converting = true;
             photo.format = format;
 
             $http.post('{{route('filemanager.base_route')}}?action=convert', photo)
@@ -597,7 +622,11 @@
                     if (data.success) {
                         photo.converting = false;
                         $scope.convertPopup = false;
-                        $scope.init()
+                        $scope.photos[$scope.selectedIndex] = data.data;
+                        if ($scope.isPreviewable(photo)) {
+                            $scope.preview = data.data
+                        }
+                        // $scope.init()
                     } else {
                         alert(data.msg)
                     }

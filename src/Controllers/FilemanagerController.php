@@ -26,13 +26,13 @@ class FilemanagerController extends Controller
 
     public function __construct()
     {
-        $this->fields = ['id', 'name', 'ext', 'file_size', 'absolute_url','extra', 'created_at', 'updated_at'];
+        $this->fields = ['id', 'name', 'ext', 'file_size', 'absolute_url', 'extra', 'created_at', 'updated_at'];
         $this->orderTypes = ['asc', 'desc'];
         $this->basePath = public_path('filemanager/uploads');
         $this->baseUrl = url('filemanager/uploads');
         $this->config = config('filemanager');
 
-        //app()->setLocale('en');
+//        app()->setLocale('bn');
     }
 
     public function getIndex(Request $request)
@@ -91,15 +91,17 @@ class FilemanagerController extends Controller
         return $data->paginate(20);
     }
 
-    private function getAbsoluteUrl($fileName){
+    private function getAbsoluteUrl($fileName)
+    {
         return $this->baseUrl . '/' . $fileName;
     }
+
     private function postConvertImage(Request $request)
     {
         $id = $request->get('id');
         $name = $request->get('name');
         $ext = $request->get('ext');
-        $convertExt=$request->get('format');
+        $convertExt = $request->get('format');
         $imageExtensions = ['png', 'jpg', 'gif', 'jpeg', 'webp'];
 
         if (!in_array($ext, $imageExtensions)) {
@@ -110,14 +112,14 @@ class FilemanagerController extends Controller
             return ['success' => false, 'msg' => "Only image are convertable"];
         }
 
-        if ($ext==$convertExt) {
+        if ($ext == $convertExt) {
             return ['success' => false, 'msg' => "Image already in $convertExt format"];
         }
 
         //end validation
 
         $fromFile = $this->basePath . '/' . $name;
-        $newName = basename($name,".".$ext).".$convertExt";
+        $newName = basename($name, "." . $ext) . ".$convertExt";
         $newFile = $this->basePath . '/' . $newName;
 
 
@@ -129,19 +131,20 @@ class FilemanagerController extends Controller
             File::delete($fromFile);
 
             //delete thumb and recreate new thumb
-            File::delete($this->basePath.'/thumbs/'.$name);
+            File::delete($this->basePath . '/thumbs/' . $name);
             $this->makeThumb($newFile);
 
             $fileSizeInByte = File::size($newFile);
-            Filemanager::find($id)
-                ->update([
-                    'name'=>$newName,
-                    'file_size'=>$fileSizeInByte,
-                    'ext'=>$convertExt,
-                    'absolute_url'=>$this->getAbsoluteUrl($newName)
-                ]);
+            $data = Filemanager::find($id);
 
-            return ['success' => true, 'msg' => 'Convert success'];
+            $data->update([
+                'name'         => $newName,
+                'file_size'    => $fileSizeInByte,
+                'ext'          => $convertExt,
+                'absolute_url' => $this->getAbsoluteUrl($newName)
+            ]);
+
+            return ['success' => true, 'msg' => 'Convert success', 'data' => $data];
         } catch (\Exception $e) {
             return ['success' => false, 'msg' => $e->getMessage()];
         }
@@ -179,9 +182,16 @@ class FilemanagerController extends Controller
                 File::move($fromThumb, $toThumb);
             }
 
-            $oldData->update(['name' => $finalName]);
+
+            $oldData->update([
+                'name'         => $finalName,
+                'absolute_url' => $this->getAbsoluteUrl($finalName)
+            ]);
             DB::commit();
-            return ['success' => true, 'msg' => 'successfully updated'];
+            return [
+                'success' => true, 'msg' => 'successfully updated',
+                'data'    => $oldData
+            ];
         } catch (\Exception $e) {
             DB::rollBack();
             return ['success' => false, 'msg' => $e->getMessage()];
@@ -201,10 +211,6 @@ class FilemanagerController extends Controller
 
         if (class_exists('Image')) {
             $savePathWithName = $pathToSave . '/' . $filename;
-
-//            Image::make($sourcePath)
-//                ->resize(40, 40)
-//                ->save($savePathWithName);
 
             (new SimpleImage())->fromFile($sourcePath)
                 ->resize(40, 40)
@@ -289,11 +295,6 @@ class FilemanagerController extends Controller
             try {
                 $savePathWithName = $this->basePath . '/' . $fileName;
 
-//                Image::make($photo)
-//                    ->resize($defaultWidth, null, function ($constraint) {
-//                        $constraint->aspectRatio();
-//                    })->save($savePathWithName,$imageQuality);
-
                 (new SimpleImage())->fromFile($photo)
                     ->resize($defaultWidth)
                     ->toFile($savePathWithName, null, $imageQuality);
@@ -325,7 +326,7 @@ class FilemanagerController extends Controller
                 'updated_at'   => $dateTime,
                 'extra'        => json_encode($extra)
             ];
-            DB::table($this->tableName)->insert($data);
+            $insertId = DB::table($this->tableName)->insertGetId($data);
         } catch (\Exception $e) {
             return $this->handleRollback($e, $fileName);
         }
@@ -342,7 +343,12 @@ class FilemanagerController extends Controller
         //make thumbnail image
 
         DB::commit();
-        return ['success' => true, 'msg' => 'Upload successful'];
+        $data = Filemanager::find($insertId);
+        return [
+            'success' => true,
+            'data'    => $data,
+            'msg'     => 'Upload successful'
+        ];
 
     }
 
@@ -362,6 +368,7 @@ class FilemanagerController extends Controller
 
     public function postDelete(Request $request)
     {
+        sleep(3);
         $id = $request->input('id');
         $userId = Auth()->user()->id;
 

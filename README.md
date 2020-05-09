@@ -13,9 +13,18 @@
 - Clean & fresh responsive UI
 - Configurable middleware
 - TinyMce, CKEditor support
-- Multiple file upload
-- Batch delete file
-- Rename file
+- Single/Multiple file upload
+- Single file selection
+- Batch file selection
+- Convert image format
+- Multi Language support
+  
+  English, Bangla, Hindi, Arabic, German, Indonesian, Japanese
+- Batch file delete
+- File rename
+- File search
+- File download
+- Event listener
 - and more
 
 ## Documentation
