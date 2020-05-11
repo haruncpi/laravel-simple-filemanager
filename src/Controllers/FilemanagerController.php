@@ -31,8 +31,9 @@ class FilemanagerController extends Controller
         $this->basePath = public_path('filemanager/uploads');
         $this->baseUrl = url('filemanager/uploads');
         $this->config = config('filemanager');
+        $this->imageFormat = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
-//        app()->setLocale('bn');
+        //app()->setLocale('bn');
     }
 
     public function getIndex(Request $request)
@@ -50,7 +51,12 @@ class FilemanagerController extends Controller
         }
 
         $thumbUrl = $this->baseUrl . '/thumbs';
-        return view('filemanager::index')->with('thumbUrl', $thumbUrl);
+        $acceptedFiles = implode(',', preg_filter('/^/', '.', array_map('trim', explode(',', config('filemanager.allow_format', 'jpg,png')))));
+
+        return view('filemanager::index', [
+            'thumbUrl'      => $thumbUrl,
+            'acceptedFiles' => $acceptedFiles
+        ]);
     }
 
     public function postAction(Request $request)
@@ -76,7 +82,6 @@ class FilemanagerController extends Controller
 
     public function getFiles(Request $r)
     {
-//        $data = DB::table($this->tableName);
         $data = new Filemanager();
         $data = $data->orderBy('id', 'desc');
         $data = $data->where('user_id', Auth()->user()->id);
@@ -85,6 +90,15 @@ class FilemanagerController extends Controller
             $q = $r->get('q');
             if ($q !== 'undefined' && $q !== '' && !empty($q)) {
                 $data = $data->where('name', 'like', '%' . $q . '%');
+            }
+        }
+
+        if ($r->has('file_type')) {
+            $type = $r->get('file_type');
+            switch ($type) {
+                case 'image';
+                    $data = $data->whereIn('ext', $this->imageFormat);
+                    break;
             }
         }
 
@@ -368,7 +382,6 @@ class FilemanagerController extends Controller
 
     public function postDelete(Request $request)
     {
-        sleep(3);
         $id = $request->input('id');
         $userId = Auth()->user()->id;
 

@@ -145,6 +145,9 @@ header .app_title {
   height: 40px;
   align-items: center;
 }
+header .app_title span {
+  margin-left: 5px;
+}
 header .right {
   display: flex;
   align-items: center;

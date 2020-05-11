@@ -217,6 +217,14 @@
             else
                 return 0;
         };
+        var serialize = function (obj) {
+            var str = [];
+            for (var p in obj)
+                if (obj.hasOwnProperty(p)) {
+                    str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                }
+            return str.join("&");
+        };
 
         if (urlParam('bulk')) {
             $scope.bulkMode = true;
@@ -239,10 +247,18 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
         };
 
+        var params = {
+            action: 'files',
+            page: 1
+        };
+        if (urlParam('file_type')) {
+            params.file_type = urlParam('file_type')
+        }
+
         $scope.init = function (q) {
 
             if (q === '' || q === undefined) {
-                url = '{{route('filemanager.base_route')}}?action=files&page=' + $scope.currentPage
+                url = '{{route('filemanager.base_route')}}?' + serialize(params)
             } else {
                 $scope.searching = true;
                 $scope.currentPage = 1;
@@ -326,19 +342,18 @@
                 $scope.checkedIds = [];
                 $scope.photos.forEach(function (photo) {
                     $scope.checkedIds.push(photo.id);
-                })
-                // console.log($scope.checkedIds)
+                });
             } else {
                 $scope.checkedIds = [];
             }
-        }
+        };
 
         var defaultOptions = {
             url: '{{route('filemanager.base_route')}}?action=upload',
             autoProcessQueue: true,
             parallelUploads: 1,
             paramName: 'photo',
-            acceptedFiles: '{{implode(',',preg_filter('/^/', '.', array_map('trim',explode(',',config('filemanager.allow_format','jpg,png')))))}}',
+            acceptedFiles: '{{$acceptedFiles}}',
             addRemoveLinks: false,
             sending: function (file, xhr, formData) {
                 formData.append('_token', csrf_token);
@@ -399,7 +414,7 @@
             },
             'queuecomplete': function (files, xhr) {
                 $scope.dzMethods.removeAllFiles()
-                // $scope.init()
+
                 console.log('queue completed');
                 //flash message
                 var el = $('.dz-default span');
@@ -483,6 +498,23 @@
                     window.opener.CKEDITOR.tools.callFunction(urlParam('CKEditorFuncNum'), row.absolute_url, '');
                     window.close();
                 }
+                if (urlParam('editor') === 'summernote') {
+
+                    if (urlParam('note')) {
+                        //custom event trigger
+                        var noteId = urlParam('note');
+                        row.note = noteId
+                        var _select_event = new CustomEvent('filemanager.select', {
+                            bubbles: false,
+                            detail: {data: row}
+                        });
+                        window.opener.dispatchEvent(_select_event);
+                        //custom event
+
+                        window.close();
+                    }
+
+                }
             }
             //this for normal button filemanager
             if (urlParam('input_id')) {
@@ -501,7 +533,7 @@
                     //custom event trigger
                     var _select_event = new CustomEvent('filemanager.select', {
                         bubbles: false,
-                        detail: {data: rows}
+                        detail: {data: row}
                     });
                     window.opener.dispatchEvent(_select_event);
                     //custom event

@@ -3,6 +3,7 @@
 namespace Haruncpi\LaravelSimpleFilemanager;
 
 use Haruncpi\LaravelSimpleFilemanager\Console\FilemanagerInstall;
+use Illuminate\Support\Facades\Blade;
 
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
 {
@@ -36,6 +37,10 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadRoutesFrom(self::ROUTE_PATH . '/web.php');
         $this->loadViewsFrom(self::VIEW_PATH, 'filemanager');
         $this->loadTranslationsFrom(self::TRANSLATION_PATH,'filemanager');
+
+        Blade::directive('FilemanagerScript', function ($expression) {
+            return "<script src=\"{{asset('filemanager/js/filemanager.js')}}\"></script>";
+        });
     }
 
     public function register()
