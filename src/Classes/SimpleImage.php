@@ -17,15 +17,6 @@ class SimpleImage {
 
     protected $image, $mimeType, $exif;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    // Magic methods
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //
-    // Creates a new SimpleImage object.
-    //
-    //  $image (string) - An image file or a data URI to load.
-    //
     public function __construct($image = null) {
         // Check for the required GD extension
         if(extension_loaded('gd')) {
@@ -52,19 +43,8 @@ class SimpleImage {
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    // Loaders
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //
-    // Loads an image from a data URI.
-    //
-    //  $uri* (string) - A data URI.
-    //
-    // Returns a SimpleImage object.
-    //
     public function fromDataUri($uri) {
-        // Basic formatting check
+
         preg_match('/^data:(.*?);/', $uri, $matches);
         if(!count($matches)) {
             throw new \Exception('Invalid data URI.', self::ERR_INVALID_DATA_URI);
@@ -89,16 +69,10 @@ class SimpleImage {
         return $this;
     }
 
-    //
-    // Loads an image from a file.
-    //
-    //  $file* (string) - The image file to load.
-    //
+
     // Returns a SimpleImage object.
     //
     public function fromFile($file) {
-        // Check if the file exists and is readable. We're using fopen() instead of file_exists()
-        // because not all URL wrappers support the latter.
         $handle = @fopen($file, 'r');
         if($handle === false) {
             throw new \Exception("File not found: $file", self::ERR_FILE_NOT_FOUND);
@@ -160,9 +134,7 @@ class SimpleImage {
         return $this;
     }
 
-    //
-    // Creates a new image.
-    //
+
     //  $width* (int) - The width of the image.
     //  $height* (int) - The height of the image.
     //  $color (string|array) - Optional fill color for the new image (default 'transparent').
@@ -181,24 +153,14 @@ class SimpleImage {
         return $this;
     }
 
-    //
-    // Creates a new image from a string.
-    //
-    //  $string* (string) - The raw image data as a string. Example:
-    //
-    //    $string = file_get_contents('image.jpg');
-    //
+
+    // $string* (string) - The raw image data as a string. Example:
+    // $string = file_get_contents('image.jpg');
     // Returns a SimpleImage object.
-    //
     public function fromString($string) {
         return $this->fromFile('data://;base64,' . base64_encode($string));
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    // Savers
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //
     // Generates an image.
     //
     //  $mimeType (string) - The image format to output as a mime type (defaults to the original mime
@@ -263,9 +225,7 @@ class SimpleImage {
         ];
     }
 
-    //
-    // Generates a data URI.
-    //
+
     //  $mimeType (string) - The image format to output as a mime type (defaults to the original mime
     //    type).
     //  $quality (int) - Image quality as a percentage (default 100).

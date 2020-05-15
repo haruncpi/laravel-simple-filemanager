@@ -1,5 +1,7 @@
 /vendor
+/__assets
 /.idea
 /node_modules
 /composer.lock
 /.phpunit.result.cache
+gulpfile.js

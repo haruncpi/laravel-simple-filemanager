@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <title>{{trans('filemanager::filemanager.title')}}</title>
-    <link rel="stylesheet" href="{{asset('filemanager/css/dropzone.min.css')}}">
+    <link rel="stylesheet" href="{{asset('filemanager/bundle/app.min.css')}}">
 
-    <link rel="stylesheet" href="{{asset('filemanager/css/font-awesome.min.css')}}">
-    <link rel="stylesheet" href="{{asset('filemanager/css/style.css')}}">
-
-    <script src="{{asset('filemanager/js/jquery-2.1.3.js')}}"></script>
-    <script src="{{asset('filemanager/js/angular.min.js')}}"></script>
     <script>
         window.translations = {!! collect(trans('filemanager::filemanager'))->toJson() !!}
     </script>
@@ -166,7 +161,7 @@
         </div>
     </div>
 
-    <!--mobile -->
+<!--mobile -->
 @include('filemanager::partials.mobile')
 <!--mobile -->
 
@@ -175,16 +170,11 @@
 <!--popup -->
 </div>
 
-<link href="{{asset('filemanager/js/ladda/dist/ladda-themeless.min.css')}}" rel="stylesheet">
-<script src="{{asset('filemanager/js/ladda/dist/spin.min.js')}}"></script>
-<script src="{{asset('filemanager/js/ladda/dist/ladda.min.js')}}"></script>
-<script src="{{asset('filemanager/js/angular-ladda.min.js')}}"></script>
-<script src="{{asset('filemanager/js/dropzone.min.js')}}"></script>
-<script src="{{asset('filemanager/js/ng-dropzone.min.js')}}"></script>
+<script src="{{asset('filemanager/bundle/app.min.js')}}"></script>
 
 <script>
 
-    var _DEBUG = true;
+    var _DEBUG = false;
     Dropzone.autoDiscover = false;
 
     if (!_DEBUG) {
@@ -414,7 +404,7 @@
             },
             'queuecomplete': function (files, xhr) {
                 $scope.dzMethods.removeAllFiles()
-
+                $scope.init();
                 console.log('queue completed');
                 //flash message
                 var el = $('.dz-default span');
@@ -425,10 +415,8 @@
                 }, 3000)
                 //flash message
             }
-        }
+        };
 
-        //Apply methods for dropzone
-        //Visit http://www.dropzonejs.com/#dropzone-methods for more methods
         $scope.dzMethods = {};
 
         $scope.isPreviewable = function (file) {
