@@ -10,13 +10,13 @@
 ![Image description](previews/preview-desktop.png)
 
 ## Features
-- Multi Language support
-
-  English, বাংলা, हिन्दी, العربية, German, Indonesian, 日本語
+- Multi-Language support (English, বাংলা, हिन्दी, العربية, German, Indonesian, 日本語).
 - Clean & fresh responsive UI
 - Easy to install
 - Configurable middleware
+- Configurable route
 - TinyMce, CKEditor, Summernote support
+- Drag and drop file upload
 - Single/Multiple file upload
 - Single file selection
 - Batch file selection
@@ -31,14 +31,13 @@
 ## Licence
 
 #### Commercial license
-If you want to use it to develop commercial sites, themes, projects, and applications, the Commercial license is the appropriate license. With this option, your source code is kept proprietary. To purchase commercial license you need buy a licence from owner. 
-- $50  - 1 Developer
-- $150 - Team (Upto 8 developers)
-- $350 - Organization (Unlimited Developers) 
-
+If you want to use it to develop commercial sites, themes, projects, and applications, the Commercial license is the appropriate license. With this option, your source code is kept proprietary. To purchase a commercial license you need to buy a licence from the owner.
+- **$50** - 1 Developer
+- **$150** - Team (Upto 8 developers)
+- **$350** - Organization (Unlimited Developers)
 
 #### Open-source license
-Free for personal blog and non commercial usages. If you are creating an open source application then use it by following the [CC4](https://creativecommons.org/licenses/by/4.0) licence rules.
+Free for personal blog and non-commercial usages. If you are creating an open-source application then use it by following the [CC4](https://creativecommons.org/licenses/by/4.0) licence rules.
 
 
 ## Documentation

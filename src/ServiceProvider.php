@@ -39,7 +39,9 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->loadTranslationsFrom(self::TRANSLATION_PATH,'filemanager');
 
         Blade::directive('FilemanagerScript', function ($expression) {
-            return "<script src=\"{{asset('filemanager/bundle/filemanager.min.js')}}\"></script>";
+            $output= "<script src=\"{{asset('filemanager/bundle/filemanager.min.js')}}\"></script>";
+            $output .= "<script> filemanager.baseUrl = '{{route('filemanager.base_route')}}';</script>";
+            return $output;
         });
     }
 
