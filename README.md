@@ -31,13 +31,13 @@
 ## Licence
 
 #### Commercial license
-If you want to use it to develop commercial sites, themes, projects, and applications, the Commercial license is the appropriate license. With this option, your source code is kept proprietary. To purchase a commercial license you need to buy a licence from the owner.
+If you want to use it to develop commercial sites, themes, projects, and applications, the Commercial license is the appropriate license. With this option, your source code is kept proprietary. To purchase a commercial license you need to buy a licence from the owner. [Contact for licence](https://laravelarticle.com/page/contact)
 - **$50** - 1 Developer
 - **$150** - Team (Upto 8 developers)
 - **$350** - Organization (Unlimited Developers)
 
 #### Open-source license
-Free for personal blog and non-commercial usages. If you are creating an open-source application then use it by following the [CC4](https://creativecommons.org/licenses/by/4.0) licence rules.
+Free for personal blog and non-commercial usages. If you are creating an open-source application then use it by following the [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) licence rules.
 
 
 ## Documentation
