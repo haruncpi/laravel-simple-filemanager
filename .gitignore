@@ -4,4 +4,6 @@
 /node_modules
 /composer.lock
 /.phpunit.result.cache
-gulpfile.js
+/gulpfile.js
+/package.json
+/package-lock.json
