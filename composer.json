@@ -1,11 +1,13 @@
 {
   "name": "haruncpi/laravel-simple-filemanager",
   "description": "A simple filemanager for Laravel",
-  "license": "cc-by-4.0",
+  "license": "cc-by-nc-4.0",
   "keywords": [
     "laravel",
     "simple",
-    "filemanager"
+    "filemanager",
+    "file manager",
+    "media manager"
   ],
   "type": "library",
   "authors": [
