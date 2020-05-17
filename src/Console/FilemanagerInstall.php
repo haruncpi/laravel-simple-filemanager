@@ -81,7 +81,7 @@ class FilemanagerInstall extends Command
             $this->info("migration published");
         }
 
-        $this->call('migrate', ['--path' => database_path("migrations/$migrationFile")]);
+        $this->call('migrate');
     }
 
     private function publishConfig()
