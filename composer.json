@@ -19,8 +19,7 @@
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-    "php": ">=5.6",
-    "illuminate/support": "^5.0"
+    "php": ">=5.6"
   },
   "autoload": {
     "files": [
