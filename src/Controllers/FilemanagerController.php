@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
 
 
 class FilemanagerController extends Controller
@@ -32,8 +31,6 @@ class FilemanagerController extends Controller
         $this->baseUrl = url('filemanager/uploads');
         $this->config = config('filemanager');
         $this->imageFormat = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-
-        //app()->setLocale('bn');
     }
 
     public function getIndex(Request $request)
@@ -223,13 +220,12 @@ class FilemanagerController extends Controller
             mkdir($pathToSave, 0777, true);
         }
 
-        if (class_exists('Image')) {
-            $savePathWithName = $pathToSave . '/' . $filename;
+        $savePathWithName = $pathToSave . '/' . $filename;
 
-            (new SimpleImage())->fromFile($sourcePath)
-                ->resize(40, 40)
-                ->toFile($savePathWithName);
-        }
+        (new SimpleImage())->fromFile($sourcePath)
+            ->resize(40, 40)
+            ->toFile($savePathWithName);
+
 
     }
 
@@ -279,6 +275,10 @@ class FilemanagerController extends Controller
         $imageExtensions = ['png', 'jpg', 'gif', 'jpeg', 'webp'];
         $extra = [];
         DB::beginTransaction();
+
+        if (!file_exists($this->basePath)) {
+            mkdir($this->basePath, 0777, true);
+        }
 
         try {
             //duplicate check and rename if exist
