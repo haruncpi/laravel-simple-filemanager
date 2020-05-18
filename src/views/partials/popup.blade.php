@@ -26,7 +26,7 @@
     <div class="popup_content">
         <div style="display: flex;">
             <div style="width:150px;height: 100px;overflow: hidden; margin-right: 10px;">
-                <img src="@{{ selectedPhoto.absolute_url }}"
+                <img ng-src="@{{ selectedPhoto.absolute_url }}"
                      onerror="this.src='/filemanager/img/previews/missing.png'"
                      width="100%"
                      alt="@{{ selectedPhoto.name }}">

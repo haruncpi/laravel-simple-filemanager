@@ -1,180 +1,185 @@
 <!doctype html>
 <html lang="en" ng-app="filemanager">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
     <title>{{trans('filemanager::filemanager.title')}}</title>
     <link rel="stylesheet" href="{{asset('filemanager/bundle/app.min.css')}}">
+    <style type="text/css">
+        [ng\:cloak],
+        [ng-cloak],
+        [data-ng-cloak],
+        [x-ng-cloak],
+        .ng-cloak,
+        .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
 
     <script>
         window.translations = {!! collect(trans('filemanager::filemanager'))->toJson() !!}
     </script>
 </head>
-<body ng-controller="FilemanagerCtrl" ng-cloak class="{{config('app.locale')}}">
 
-<header>
-    <h2 class="app_title"><img src="{{asset('filemanager/img/logo.png')}}"
-                               alt=""><span>{{trans('filemanager::filemanager.title')}}</span></h2>
+<body ng-cloak ng-controller="FilemanagerCtrl" class="{{config('app.locale')}}">
+    <header>
+        <h2 class="app_title"><img src="{{asset('filemanager/img/logo.png')}}"
+                alt=""><span>{{trans('filemanager::filemanager.title')}}</span></h2>
 
-    <div class="right">
-        <button class="btn_bulk_actions danger"
-                ng-click="bulkDelete()"
-                ng-show="checkedIds.length>1"
+        <div class="right">
+            <button class="btn_bulk_actions danger" ng-click="bulkDelete()" ng-show="checkedIds.length>1"
                 ng-disabled="bulkDeleting" ladda="bulkDeleting">{{trans('filemanager::filemanager.bulk-delete')}} (@{{
             checkedIds.length }})
-        </button>
+            </button>
 
-        <div class="search_box">
-            <input type="text" placeholder="{{trans('filemanager::filemanager.search')}}"
-                   ng-model="q"
-                   ng-model-options="{debounce:500}"
-                   ng-change="init(q)">
-            <div class="searching" ng-show="searching">
-                <img src="{{asset('filemanager/img/ajax-loader.gif')}}" alt="loader"/>
-            </div>
-            <div class="clear_search" ng-show="q" ng-click="clearSearch()">
-                <i class="fa fa-times"></i>
-            </div>
-        </div>
-        <a class="btn-doc" href="#"><i class="fa fa-info-circle"></i> {{trans('filemanager::filemanager.doc')}}</a>
-    </div>
-</header>
-<!--custom preview-->
-<div class="dz_custom_preview_box">
-    <div class="dz_custom_preview">
-        <div class="image">
-            <img data-dz-thumbnail/>
-        </div>
-        <div class="info">
-            <div class="dz-filename"><span data-dz-name></span></div>
-            <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-        </div>
-    </div>
-</div>
-<!--custom preview-->
-
-<div class="wrapper">
-    <div class="sidebar">
-        <button class="btn_mobile_upload success" ng-click="mobileUploadOpen=1"><i
-                    class="fa fa-upload"></i> {{trans('filemanager::filemanager.upload')}}
-        </button>
-        {{--upload section--}}
-        <div class="upload_section" ng-hide="previewOpen">
-            <div class="btn_mobile_upload_close">
-                <button ng-click="mobileUploadOpen=0"><i class="fa fa-times"></i></button>
-            </div>
-
-            <p class="upload_title">{{trans('filemanager::filemanager.upload')}}</p>
-            <input type="hidden" name="_token" value="{{csrf_token()}}">
-
-
-            <div class="upload_area dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"
-                 ng-dropzone></div>
-
-            <div class="dz_preview_container"></div>
-        </div>
-        {{--end upload section--}}
-        {{--preview section--}}
-        <div class="preview_section" ng-show="previewOpen">
-            <div class="preview_header">
-                <div class="title">{{trans('filemanager::filemanager.preview')}}</div>
-                <div class="button">
-                    <button ng-click="closePreview()"><i class="fa fa-times"></i></button>
+            <div class="search_box">
+                <input type="text" placeholder="{{trans('filemanager::filemanager.search')}}" ng-model="q"
+                    ng-model-options="{debounce:500}" ng-change="init(q)">
+                <div class="searching" ng-show="searching">
+                    <img src="{{asset('filemanager/img/ajax-loader.gif')}}" alt="loader" />
+                </div>
+                <div class="clear_search" ng-show="q" ng-click="clearSearch()">
+                    <i class="fa fa-times"></i>
                 </div>
             </div>
-
-            <div class="image_wrapper">
-                <img onerror="this.src='/filemanager/img/previews/missing.png'" ng-src="@{{ preview.absolute_url }}"
-                     alt="@{{ preview.name }}">
+            <a class="btn-doc" href="https://laravelarticle.com/laravel-simple-filemanager"><i
+                    class="fa fa-info-circle"></i> {{trans('filemanager::filemanager.doc')}}</a>
+        </div>
+    </header>
+    <!--custom preview-->
+    <div class="dz_custom_preview_box">
+        <div class="dz_custom_preview">
+            <div class="image">
+                <img data-dz-thumbnail />
             </div>
             <div class="info">
-                @include('filemanager::partials.preview')
+                <div class="dz-filename"><span data-dz-name></span></div>
+                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
             </div>
         </div>
-        {{--end preview section--}}
-
     </div>
-    <div class="content">
-        <div class="gallery">
-            <!--gallery header-->
-            <div class="gl_item gl_header">
-                <div class="name">
-                    <input type="checkbox" ng-model="bulk_select" ng-click="checkAll()">
-                    {{trans('filemanager::filemanager.name')}}
-                </div>
-                <div class="size">{{trans('filemanager::filemanager.size')}}</div>
-                <div class="type">{{trans('filemanager::filemanager.type')}}</div>
-                <div class="modified">{{trans('filemanager::filemanager.modified')}}</div>
-                <div class="action">{{trans('filemanager::filemanager.action')}}</div>
-            </div>
-            <!--end gallery header-->
-            <!--single-->
-            <div class="gl_item" ng-repeat="photo in photos"
-                 ng-class="checkedIds.indexOf(photo.id) !== -1 ? 'active':''">
-                <div class="name">
-                    <input type="checkbox"
-                           ng-checked="checkedIds.indexOf(photo.id) != -1" ng-click="toggleCheck(photo.id)">
+    <!--custom preview-->
 
-                    <div class="thum" ng-click="toggleCheck(photo.id)">
-                        <img ng-if="photo.ext=='png' ||
+    <div class="wrapper">
+        <div class="sidebar">
+            <button class="btn_mobile_upload success" ng-click="mobileUploadOpen=1"><i class="fa fa-upload"></i>
+                {{trans('filemanager::filemanager.upload')}}
+            </button>
+            {{--upload section--}}
+            <div class="upload_section" ng-hide="previewOpen">
+                <div class="btn_mobile_upload_close">
+                    <button ng-click="mobileUploadOpen=0"><i class="fa fa-times"></i></button>
+                </div>
+
+                <p class="upload_title">{{trans('filemanager::filemanager.upload')}}</p>
+                <input type="hidden" name="_token" value="{{csrf_token()}}">
+
+
+                <div class="upload_area dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods"
+                    ng-dropzone></div>
+
+                <div class="dz_preview_container"></div>
+            </div>
+            {{--end upload section--}}
+            {{--preview section--}}
+            <div class="preview_section" ng-show="previewOpen">
+                <div class="preview_header">
+                    <div class="title">{{trans('filemanager::filemanager.preview')}}</div>
+                    <div class="button">
+                        <button ng-click="closePreview()"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+
+                <div class="image_wrapper">
+                    <img onerror="this.src='/filemanager/img/previews/missing.png'" ng-src="@{{ preview.absolute_url }}"
+                        alt="@{{ preview.name }}">
+                </div>
+                <div class="info">
+                    @include('filemanager::partials.preview')
+                </div>
+            </div>
+            {{--end preview section--}}
+
+        </div>
+        <div class="content">
+            <div class="gallery">
+                <!--gallery header-->
+                <div class="gl_item gl_header">
+                    <div class="name">
+                        <input type="checkbox" ng-model="bulk_select" ng-click="checkAll()">
+                        {{trans('filemanager::filemanager.name')}}
+                    </div>
+                    <div class="size">{{trans('filemanager::filemanager.size')}}</div>
+                    <div class="type">{{trans('filemanager::filemanager.type')}}</div>
+                    <div class="modified">{{trans('filemanager::filemanager.modified')}}</div>
+                    <div class="action">{{trans('filemanager::filemanager.action')}}</div>
+                </div>
+                <!--end gallery header-->
+                <!--single-->
+                <div class="gl_item" ng-repeat="photo in photos"
+                    ng-class="checkedIds.indexOf(photo.id) !== -1 ? 'active':''">
+                    <div class="name">
+                        <input type="checkbox" ng-checked="checkedIds.indexOf(photo.id) != -1"
+                            ng-click="toggleCheck(photo.id)">
+
+                        <div class="thum" ng-click="toggleCheck(photo.id)">
+                            <img ng-if="photo.ext=='png' ||
                                     photo.ext=='jpg' ||
                                     photo.ext=='jpeg' ||
                                     photo.ext=='webp' ||
-                                    photo.ext=='gif'"
-                             ng-src="{{$thumbUrl}}/@{{ photo.name }}" alt="@{{ photo.name }}">
+                                    photo.ext=='gif'" ng-src="{{$thumbUrl}}/@{{ photo.name }}" alt="@{{ photo.name }}">
 
-                        <p ng-if="photo.ext=='txt'"><i class="fa fa-file-text fa-2x"></i></p>
-                        <p ng-if="photo.ext=='pdf'"><i class="fa fa-file-pdf-o fa-2x"></i></p>
-                        <p ng-if="photo.ext=='doc'||photo.ext=='docx'"><i class="fa fa-file-word-o fa-2x"></i></p>
-                        <p ng-if="photo.ext=='xls'||photo.ext=='xlsx'"><i class="fa fa-file-excel-o fa-2x"></i></p>
+                            <p ng-if="photo.ext=='txt'"><i class="fa fa-file-text fa-2x"></i></p>
+                            <p ng-if="photo.ext=='pdf'"><i class="fa fa-file-pdf-o fa-2x"></i></p>
+                            <p ng-if="photo.ext=='doc'||photo.ext=='docx'"><i class="fa fa-file-word-o fa-2x"></i></p>
+                            <p ng-if="photo.ext=='xls'||photo.ext=='xlsx'"><i class="fa fa-file-excel-o fa-2x"></i></p>
 
+                        </div>
+                        <p ng-click="toggleCheck(photo.id)">@{{ photo.name }}</p>
                     </div>
-                    <p ng-click="toggleCheck(photo.id)">@{{ photo.name }}</p>
+                    <div class="size">@{{ formatBytes(photo.file_size) }}</div>
+                    <div class="type">@{{ photo.ext }}</div>
+                    <div class="modified">@{{ photo.updated_at }}</div>
+                    <div class="action">
+                        @include('filemanager::partials.action')
+                    </div>
                 </div>
-                <div class="size">@{{ formatBytes(photo.file_size) }}</div>
-                <div class="type">@{{ photo.ext }}</div>
-                <div class="modified">@{{ photo.updated_at }}</div>
-                <div class="action">
-                    @include('filemanager::partials.action')
+                <!--single-->
+                <!--load more-->
+                <div class="load_more" ng-hide="data.last_page === currentPage">Loading ...</div>
+                <!--#load more-->
+            </div>
+            <div class="content_footer">
+                <div class="left">
+                    {{--<strong>@{{checkedIds.length}}</strong> {{trans('filemanager::filemanager.item-selected')}}--}}
+                    <span>
+                        @{{ showing_file_translation }}
+                    </span>
                 </div>
-            </div>
-            <!--single-->
-            <!--load more-->
-            <div class="load_more" ng-hide="data.last_page === currentPage">Loading ...</div>
-            <!--#load more-->
-        </div>
-        <div class="content_footer">
-            <div class="left">
-                {{--<strong>@{{checkedIds.length}}</strong> {{trans('filemanager::filemanager.item-selected')}}--}}
-                <span>
-                    @{{ showing_file_translation }}
-               </span>
-            </div>
-            <div class="right">
-                <button type="button" ng-click="bulkSelect()"
-                        ng-if="bulkMode"
-                        ng-disabled="!checkedIds.length"
-                >{{trans('filemanager::filemanager.bulk-select')}} (@{{ checkedIds.length }})
-                </button>
+                <div class="right">
+                    <button type="button" ng-click="bulkSelect()" ng-if="bulkMode"
+                        ng-disabled="!checkedIds.length">{{trans('filemanager::filemanager.bulk-select')}}
+                        (@{{ checkedIds.length }})
+                    </button>
+                </div>
             </div>
         </div>
+
+        <!--mobile -->
+        @include('filemanager::partials.mobile')
+        <!--mobile -->
+
+        <!--popup -->
+        @include('filemanager::partials.popup')
+        <!--popup -->
     </div>
 
-<!--mobile -->
-@include('filemanager::partials.mobile')
-<!--mobile -->
+    <script src="{{asset('filemanager/bundle/app.min.js')}}"></script>
 
-    <!--popup -->
-@include('filemanager::partials.popup')
-<!--popup -->
-</div>
-
-<script src="{{asset('filemanager/bundle/app.min.js')}}"></script>
-
-<script>
-
-    var _DEBUG = false;
+    <script>
+        var _DEBUG = false;
     Dropzone.autoDiscover = false;
 
     if (!_DEBUG) {
@@ -658,6 +663,7 @@
         }
 
     })
-</script>
+    </script>
 </body>
+
 </html>
