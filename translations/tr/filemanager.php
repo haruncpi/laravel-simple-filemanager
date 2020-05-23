@@ -17,9 +17,12 @@ return [
     'action'         => 'İşlemler',
     'bulk-select'    => 'Çoklu Seçim',
     'showing-files'  => ':total dosyadan :current öğe gösteriliyor',
+    'select'         => 'Seç',
+    'download'       => 'İndir',
     'edit'           => 'Düzenle',
     'update'         => 'Güncelle',
     'convert'        => 'Dönüştür',
     'format'         => 'Dosya tipi',
     'choose_format'  => 'Dosya tipi seçiniz',
+    'delete'         => 'Sil',
 ];
