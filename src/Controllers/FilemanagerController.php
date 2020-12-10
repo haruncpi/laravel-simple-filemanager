@@ -1,7 +1,4 @@
-<?php
-
-namespace Haruncpi\LaravelSimpleFilemanager\Controllers;
-
+<?php namespace Haruncpi\LaravelSimpleFilemanager\Controllers;
 
 use App\Http\Controllers\Controller;
 

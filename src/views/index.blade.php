@@ -479,18 +479,33 @@
 
             //this from tinyMCE editor filemanager
             if (urlParam('editor')) {
+                
                 if (urlParam('editor') === 'tinyMCE') {
                     if (typeof parent.tinyMCE !== "undefined") {
-                        $('.mce-textbox', window.parent.document).eq(0).val(row.absolute_url);
-                        $('.mce-textbox', window.parent.document).eq(1).val(row.name);
-                        var ed = parent.tinymce.editors[0]; //get the first editor
-                        ed.windowManager.windows[1].close();
+                        var version = parseInt(parent.tinyMCE.majorVersion)
+                        if(version===4){
+                            $('.mce-textbox', window.parent.document).eq(0).val(row.absolute_url);
+                            $('.mce-textbox', window.parent.document).eq(1).val(row.name);
+                            var ed = parent.tinymce.editors[0]; //get the first editor
+                            ed.windowManager.windows[1].close();
+                        }
+                        else if(version===5){
+                            $('.tox-textfield', window.parent.document).eq(0).val(row.absolute_url);
+                            $('.tox-textfield', window.parent.document).eq(1).val(row.name);
+                            var ed = parent.tinymce.editors[0]; //get the first editor
+                            ed.windowManager.close();
+                        }
+                        else{
+                            throw("TinyMCE version:"+version+" is not supported")
+                        }
                     }
                 }
+
                 if (urlParam('editor') === 'ckEditor') {
                     window.opener.CKEDITOR.tools.callFunction(urlParam('CKEditorFuncNum'), row.absolute_url, '');
                     window.close();
                 }
+                
                 if (urlParam('editor') === 'summernote') {
 
                     if (urlParam('note')) {
@@ -509,6 +524,7 @@
 
                 }
             }
+
             //this for normal button filemanager
             if (urlParam('input_id')) {
                 if (window.opener.document.getElementById(urlParam('input_id'))) {
