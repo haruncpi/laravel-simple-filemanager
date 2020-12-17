@@ -11,11 +11,11 @@
 
 ## Features
 - Multi-Language support (English, বাংলা, हिन्दी, العربية, German, Indonesian, 日本語, Turkish).
+- Popular Editor Support: TinyMCE 4, TinyMCE 5, CKEditor, Summernote
 - Clean & fresh responsive UI
 - Easy to install
 - Configurable middleware
 - Configurable route
-- TinyMce, CKEditor, Summernote support
 - Drag and drop file upload
 - Single/Multiple file upload
 - Single file selection
@@ -42,4 +42,9 @@ Free for personal blog and non-commercial usages. If you are creating an open-so
 
 ## Documentation
 Get full documentation of [Laravel Simple Filemanager](https://laravelarticle.com/laravel-simple-filemanager)
+
+
+## Changelog
+v1.0.2
+- TinyMCE 5 support added
 
