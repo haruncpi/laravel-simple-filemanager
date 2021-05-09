@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'title'          => 'Gerenciador de arquivos',
+    'upload'         => 'Envio',
+    'upload-message' => 'Arraste e solte os arquivos aqui para enviar',
+    'success-upload' => 'Enviado com sucesso!',
+    'search'         => 'Pesquisar',
+    'doc'            => 'Documento',
+    'bulk-delete'    => 'Deletar Tudo',
+    'preview'        => 'Visualizar',
+    'name'           => 'Nome',
+    'size'           => 'Tamanho',
+    'type'           => 'Tipo',
+    'modified'       => 'Modificado',
+    'created'        => 'Criado',
+    'dimension'      => 'Dimensão',
+    'action'         => 'Opções',
+    'bulk-select'    => 'Selecionar Tudo',
+    'showing-files'  => 'Mostrando :current de :total arquivos',
+    'edit'           => 'Editar',
+    'update'         => 'Atualizar',
+    'convert'        => 'Converter',
+    'format'         => 'Formato',
+    'choose_format'  => 'Escolha o formato',
+];
