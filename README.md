@@ -9,6 +9,9 @@
 
 ![Image description](previews/preview-desktop.png)
 
+## Support
+<a href="https://www.buymeacoffee.com/haruncpi" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="width: 160px !important;" ></a>
+
 ## Features
 - Multi-Language support (English, বাংলা, हिन्दी, العربية, German, Indonesian, 日本語).
 - Popular Editor Support: TinyMCE 4, TinyMCE 5, CKEditor, Summernote
