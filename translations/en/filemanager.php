@@ -17,9 +17,12 @@ return [
     'action'         => 'Action',
     'bulk-select'    => 'Bulk Select',
     'showing-files'  => 'Showing :current of :total files',
+    'select'         => 'Select',
+    'download'       => 'İndir',
     'edit'           => 'Edit',
     'update'         => 'Update',
     'convert'        => 'Convert',
     'format'         => 'Format',
     'choose_format'  => 'Choose Format',
+    'delete'         => 'Delete',
 ];
